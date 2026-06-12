@@ -51,12 +51,11 @@
   margin-bottom: 2px;
 }
 
-.brand-icon {
-  font-size: 36px;
-  width: 36px;
-  height: 36px;
-  color: #d4a843;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+.brand-logo-img {
+  width: 72px;
+  height: 72px;
+
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
 }
 
 .brand-name {
