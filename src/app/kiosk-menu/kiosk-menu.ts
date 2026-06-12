@@ -18,7 +18,7 @@ const TRANSLATIONS: Record<string, string> = {
   JUNIOR_MENU: 'Junior Menu',
   PINSA: 'Pinsa',
   PASTA: 'Pasta',
-  HOTDOG_BURGERS: 'Hot Dogs & Burgers',
+  HOTDOG_BURGERS: 'Burgers',
   BAO_BUNS: 'Bao Buns',
   SALADS: 'Salads',
   MAIN_COURSES: 'Main Courses',
