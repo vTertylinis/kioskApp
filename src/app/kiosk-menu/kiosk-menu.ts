@@ -170,6 +170,8 @@ export interface GridLayout {
   cardHeight: number;
   /** Gap in px between rows/columns, passed as --grid-gap. */
   gap: number;
+  /** Key of the current category, used for per-category template overrides. */
+  categoryKey: string;
 }
 
 @Component({
@@ -200,7 +202,7 @@ export class KioskMenu implements OnInit, AfterViewInit, OnDestroy {
     const { w: gridW, h: gridH } = this.gridSize();
 
     if (!cat || cat.items.length === 0 || gridW === 0 || gridH === 0) {
-      return { perRow: 2, rows: [], cardHeight: 300, gap: GRID_GAP };
+      return { perRow: 2, rows: [], cardHeight: 300, gap: GRID_GAP, categoryKey: '' };
     }
 
     const n = cat.items.length;
@@ -224,7 +226,7 @@ export class KioskMenu implements OnInit, AfterViewInit, OnDestroy {
       rows.push(cat.items.slice(i, i + count));
       i += count;
     }
-    return { perRow, rows, cardHeight, gap };
+    return { perRow, rows, cardHeight, gap, categoryKey: cat.key };
   });
 
   private intervalId: ReturnType<typeof setInterval> | null = null;

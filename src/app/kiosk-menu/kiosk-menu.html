@@ -37,7 +37,7 @@
             <mat-card-content class="card-body">
               <h3 class="item-name">{{ getItemName(item) }}</h3>
               <span class="item-price">{{ item.price | currency:'EUR':'symbol':'1.2-2' }}</span>
-              @if (getItemDesc(item)) {
+              @if (getItemDesc(item) && gridLayout().categoryKey !== 'BREAKFAST') {
                 <p class="item-desc">{{ getItemDesc(item) }}</p>
               }
             </mat-card-content>
