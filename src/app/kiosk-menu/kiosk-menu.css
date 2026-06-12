@@ -120,17 +120,6 @@
   font-weight: 500;
 }
 
-/* ===== Menu Grid ===== */
-/*
- * 6-column CSS grid. Each row (.menu-row) spans all 6 columns and is itself
- * a 6-column subgrid. Cards inside span 2, 3, or 6 columns depending on how
- * many cards share that row (data-cols="3" → 2 cols each, "2" → 3 cols each,
- * "1" → 6 cols). This gives balanced widths for any row size without flex math.
- *
- * Row heights come from --card-height (px), computed in TypeScript as:
- *   min(availableHeightPerRow, cardWidth)  ← square cap, never portrait
- * All rows together fill the available space with no scrolling.
- */
 .menu-grid {
   --grid-gap: 14px;
   --card-height: 300px; /* overridden inline per category */
@@ -155,12 +144,17 @@
 
 /* 3 cards in the row → each spans 2 of 6 columns */
 .menu-row[data-cols="3"] .menu-card { grid-column: span 2; }
-/* 2 cards in the row → each spans 3 of 6 columns */
+/* 2 cards in the row → each spans 3 of 6 columns (default large) */
 .menu-row[data-cols="2"] .menu-card { grid-column: span 3; }
 /* 1 card in the row → full width */
-.menu-row[data-cols="1"] .menu-card {
-  grid-column: 1 / -1;
-}
+.menu-row[data-cols="1"] .menu-card { grid-column: 1 / -1; }
+
+/* Tail row: fewer cards than the base row count — match the base card width.
+   e.g. Breakfast 3+3+3+3+2: the last 2 cards use span 2 (same as the 3-col
+   rows above) and are centered via column offsets. */
+.menu-row[data-tail][data-cols="2"] .menu-card { grid-column: span 2; }
+.menu-row[data-tail][data-cols="2"] .menu-card:first-child { grid-column: 2 / 4; }
+.menu-row[data-tail][data-cols="2"] .menu-card:last-child  { grid-column: 4 / 6; }
 
 /* ===== Menu Card ===== */
 .menu-card {

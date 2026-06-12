@@ -26,7 +26,9 @@
     [style.--card-height.px]="gridLayout().cardHeight"
     [style.--grid-gap.px]="gridLayout().gap">
     @for (row of gridLayout().rows; track $index) {
-      <div class="menu-row" [attr.data-cols]="row.length">
+      <div class="menu-row"
+        [attr.data-cols]="row.length"
+        [attr.data-tail]="row.length < gridLayout().perRow ? true : null">
         @for (item of row; track item.id) {
           <mat-card class="menu-card" appearance="outlined">
             <div class="card-image-wrapper">
