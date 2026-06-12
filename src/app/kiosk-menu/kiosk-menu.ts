@@ -236,7 +236,16 @@ export class KioskMenu implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.buildCategories();
+    this.preloadImages();
     this.startSlideshow();
+  }
+
+  private preloadImages(): void {
+    for (const item of menuItems) {
+      if (item.image) {
+        new Image().src = item.image;
+      }
+    }
   }
 
   ngAfterViewInit(): void {
