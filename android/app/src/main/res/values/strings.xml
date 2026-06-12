@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">kiosk-app</string>
+    <string name="title_activity_main">kiosk-app</string>
+    <string name="package_name">com.tertis.myapp</string>
+    <string name="custom_url_scheme">com.tertis.myapp</string>
+</resources>

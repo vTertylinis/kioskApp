@@ -1,0 +1,80 @@
+<div class="kiosk-container">
+  <!-- Hero Header -->
+  <header class="hero-header">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="brand-logo">
+        <mat-icon class="brand-icon">restaurant</mat-icon>
+      </div>
+      <h1 class="brand-name">21 Kitchen</h1>
+      <span class="brand-tagline">— Cocktail Bar —</span>
+
+      <div class="category-title-wrapper">
+        <span class="chevron-left">›</span>
+        <h2 class="category-title">{{ currentCategory().label }}</h2>
+        <span class="chevron-right">‹</span>
+      </div>
+      <div class="hero-badge">
+        <span>FRESH • PREMIUM • HANDMADE</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu Grid -->
+  <section class="menu-grid">
+    @for (item of currentCategory().items; track item.id) {
+      <mat-card class="menu-card" appearance="outlined">
+        <div class="card-image-wrapper">
+          <img [src]="item.image" [alt]="getItemName(item)" class="card-image" loading="eager" />
+          <div class="card-favorite">
+            <mat-icon>star_outline</mat-icon>
+          </div>
+        </div>
+        <mat-card-content class="card-body">
+          <h3 class="item-name">{{ getItemName(item) }}</h3>
+          <span class="item-price">{{ item.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+          @if (getItemDesc(item)) {
+            <p class="item-desc">{{ getItemDesc(item) }}</p>
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+
+  <!-- Bottom Bar -->
+  <footer class="bottom-bar">
+    <div class="category-strip-label">
+      <span class="strip-dash">—</span>
+      <span>BROWSE CATEGORIES</span>
+      <span class="strip-dash">—</span>
+    </div>
+    <div class="category-strip">
+      <div class="nav-arrow">
+        <mat-icon>chevron_left</mat-icon>
+      </div>
+      @for (cat of categories; track cat.key; let i = $index) {
+        <div class="cat-chip" [class.active]="currentIndex() === i">
+          <mat-icon class="cat-chip-icon">{{ cat.icon }}</mat-icon>
+          <span class="cat-chip-label">{{ cat.label }}</span>
+        </div>
+      }
+      <div class="nav-arrow">
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-info-left">
+        <mat-icon class="progress-icon">restaurant_menu</mat-icon>
+        <div class="progress-text">
+          <span class="progress-label">SHOWING CATEGORY</span>
+          <span class="progress-count">{{ currentIndex() + 1 }} OF {{ categories.length }}</span>
+        </div>
+      </div>
+      <mat-progress-bar mode="determinate" [value]="progress()" class="progress-bar"></mat-progress-bar>
+      <div class="progress-info-right">
+        <span class="countdown-label">NEXT CATEGORY IN</span>
+        <span class="countdown-timer">{{ getCountdown() }}</span>
+      </div>
+    </div>
+  </footer>
+</div>
