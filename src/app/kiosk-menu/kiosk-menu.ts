@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, signal, computed, ElementRef, ViewChild } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -155,12 +155,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   MAIN_COURSES: 'restaurant',
 };
 
-const SLIDE_DURATION_MS = 2000;
-
-// Usable grid area on a 1080×1920 portrait kiosk.
-// Header ≈195px, footer ≈150px, grid padding 16px top+bottom = 32px.
-const GRID_W = 1052; // 1080 - 14px padding each side
-const GRID_H = 1543; // 1920 - 195 - 150 - 32
+const SLIDE_DURATION_MS = 8000;
 const GRID_GAP = 14;
 
 export interface GridLayout {
@@ -184,32 +179,43 @@ export interface GridLayout {
   templateUrl: './kiosk-menu.html',
   styleUrl: './kiosk-menu.css',
 })
-export class KioskMenu implements OnInit, OnDestroy {
+export class KioskMenu implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('menuGrid', { static: true }) menuGridRef!: ElementRef<HTMLElement>;
+
   categories: Category[] = [];
   currentIndex = signal(0);
   progress = signal(0);
 
+  /** Measured from the real DOM — updated by ResizeObserver. */
+  private gridSize = signal({ w: 0, h: 0 });
+
   currentCategory = computed(() => this.categories[this.currentIndex()]);
 
   /**
-   * Adaptive layout for the current category. Picks how many cards share a row
-   * (fewer items → wider, more premium cards; more items → a denser grid) and
-   * splits the items into rows that always fill the available space, so the
-   * grid never scrolls and the final row never looks like it is missing cards.
+   * Adaptive layout derived from the actual measured grid container size.
+   * Never uses hardcoded 1080×1920 values.
    */
   gridLayout = computed<GridLayout>(() => {
     const cat = this.currentCategory();
-    if (!cat || cat.items.length === 0) return { perRow: 2, rows: [], cardHeight: 300, gap: GRID_GAP };
+    const { w: gridW, h: gridH } = this.gridSize();
+
+    if (!cat || cat.items.length === 0 || gridW === 0 || gridH === 0) {
+      return { perRow: 2, rows: [], cardHeight: 300, gap: GRID_GAP };
+    }
 
     const n = cat.items.length;
     const perRow = this.chooseColumns(n);
     const rowCounts = this.distributeRows(n, perRow);
     const numRows = rowCounts.length;
-
     const gap = GRID_GAP;
 
-    const cardW = (GRID_W - (perRow - 1) * gap) / perRow;
-    const availH = (GRID_H - (numRows - 1) * gap) / numRows;
+    // Subtract padding (16px each side) already present in CSS, but we measure
+    // clientWidth which includes padding, so we must subtract it here.
+    const innerW = gridW - 28; // 14px left + 14px right padding
+    const innerH = gridH - 32; // 16px top + 16px bottom padding
+
+    const cardW = (innerW - (perRow - 1) * gap) / perRow;
+    const availH = (innerH - (numRows - 1) * gap) / numRows;
     const cardHeight = Math.floor(Math.min(availH, cardW));
 
     const rows: MenuItem[][] = [];
@@ -224,14 +230,41 @@ export class KioskMenu implements OnInit, OnDestroy {
   private intervalId: ReturnType<typeof setInterval> | null = null;
   private progressId: ReturnType<typeof setInterval> | null = null;
   private startTime = 0;
+  private resizeObserver: ResizeObserver | null = null;
 
   ngOnInit(): void {
     this.buildCategories();
     this.startSlideshow();
   }
 
+  ngAfterViewInit(): void {
+    const el = this.menuGridRef.nativeElement;
+
+    const measure = () => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      this.gridSize.set({ w, h });
+    };
+
+    // Log viewport diagnostics to help confirm real kiosk dimensions.
+    console.log('[KioskMenu] viewport diagnostics', {
+      'window.innerWidth': window.innerWidth,
+      'window.innerHeight': window.innerHeight,
+      'window.devicePixelRatio': window.devicePixelRatio,
+      'documentElement.clientWidth': document.documentElement.clientWidth,
+      'documentElement.clientHeight': document.documentElement.clientHeight,
+      'menuGrid.clientWidth': el.clientWidth,
+      'menuGrid.clientHeight': el.clientHeight,
+    });
+
+    measure();
+    this.resizeObserver = new ResizeObserver(() => measure());
+    this.resizeObserver.observe(el);
+  }
+
   ngOnDestroy(): void {
     this.stopSlideshow();
+    this.resizeObserver?.disconnect();
   }
 
   private buildCategories(): void {

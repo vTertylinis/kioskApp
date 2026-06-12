@@ -22,7 +22,7 @@
 
   <!-- Menu Grid -->
   <!-- 6-column CSS grid: 1 card/row → span 6, 2 cards/row → span 3, 3 cards/row → span 2 -->
-  <section class="menu-grid"
+  <section #menuGrid class="menu-grid"
     [style.--card-height.px]="gridLayout().cardHeight"
     [style.--grid-gap.px]="gridLayout().gap">
     @for (row of gridLayout().rows; track $index) {
