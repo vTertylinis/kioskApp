@@ -155,7 +155,27 @@ const CATEGORY_ICONS: Record<string, string> = {
   MAIN_COURSES: 'restaurant',
 };
 
-const SLIDE_DURATION_MS = 8000;
+const SLIDE_DURATION_MS = 2000;
+
+// Usable grid area on a 1080×1920 portrait kiosk.
+// Header ≈195px, footer ≈150px, grid padding 16px top+bottom = 32px.
+const GRID_W = 1052; // 1080 - 14px padding each side
+const GRID_H = 1543; // 1920 - 195 - 150 - 32
+const GRID_GAP = 14;
+
+export interface GridLayout {
+  /** Cards per full row — also the CSS --per-row denominator. */
+  perRow: number;
+  /** Items grouped into rows. */
+  rows: MenuItem[][];
+  /**
+   * Explicit card height in px, passed as --card-height.
+   * = min(availableHeightPerRow, cardWidth) — fills space, capped at square.
+   */
+  cardHeight: number;
+  /** Gap in px between rows/columns, passed as --grid-gap. */
+  gap: number;
+}
 
 @Component({
   selector: 'app-kiosk-menu',
@@ -170,6 +190,36 @@ export class KioskMenu implements OnInit, OnDestroy {
   progress = signal(0);
 
   currentCategory = computed(() => this.categories[this.currentIndex()]);
+
+  /**
+   * Adaptive layout for the current category. Picks how many cards share a row
+   * (fewer items → wider, more premium cards; more items → a denser grid) and
+   * splits the items into rows that always fill the available space, so the
+   * grid never scrolls and the final row never looks like it is missing cards.
+   */
+  gridLayout = computed<GridLayout>(() => {
+    const cat = this.currentCategory();
+    if (!cat || cat.items.length === 0) return { perRow: 2, rows: [], cardHeight: 300, gap: GRID_GAP };
+
+    const n = cat.items.length;
+    const perRow = this.chooseColumns(n);
+    const rowCounts = this.distributeRows(n, perRow);
+    const numRows = rowCounts.length;
+
+    const gap = GRID_GAP;
+
+    const cardW = (GRID_W - (perRow - 1) * gap) / perRow;
+    const availH = (GRID_H - (numRows - 1) * gap) / numRows;
+    const cardHeight = Math.floor(Math.min(availH, cardW));
+
+    const rows: MenuItem[][] = [];
+    let i = 0;
+    for (const count of rowCounts) {
+      rows.push(cat.items.slice(i, i + count));
+      i += count;
+    }
+    return { perRow, rows, cardHeight, gap };
+  });
 
   private intervalId: ReturnType<typeof setInterval> | null = null;
   private progressId: ReturnType<typeof setInterval> | null = null;
@@ -199,6 +249,48 @@ export class KioskMenu implements OnInit, OnDestroy {
       icon: CATEGORY_ICONS[key] || 'restaurant_menu',
       items,
     }));
+  }
+
+  // Returns the column count that matches the widest row in the pattern,
+  // used only to compute cardWidth → cardHeight. Must match distributeRows.
+  private chooseColumns(n: number): number {
+    if (n <= 3)  return 1; // n=1–3: all rows are 1-wide (full width cards)
+    if (n <= 8)  return 2; // n=5–8: widest row has 2 cards
+    if (n === 9) return 2; // n=9: pattern 2+2+2+2+1, widest row = 2
+    return 3;              // n=10+: widest row = 3
+  }
+
+  // Returns explicit row sizes matching the preferred patterns.
+  // Uses a lookup for the counts specified by the user; falls back to even
+  // distribution for anything else.
+  private distributeRows(n: number, perRow: number): number[] {
+    const patterns: Record<number, number[]> = {
+      1:  [1],
+      2:  [1, 1],
+      3:  [1, 1, 1],
+      4:  [2, 2],
+      5:  [2, 2, 1],
+      6:  [2, 2, 2],
+      7:  [2, 2, 3],
+      8:  [2, 2, 2, 2],
+      9:  [2, 2, 2, 3],
+      10: [3, 3, 2, 2],
+      11: [3, 3, 3, 2],
+      12: [3, 3, 3, 3],
+      13: [3, 3, 3, 2, 2],
+      14: [3, 3, 3, 3, 2],
+      15: [3, 3, 3, 3, 3],
+      16: [3, 3, 3, 3, 2, 2],
+    };
+    if (patterns[n]) return patterns[n];
+
+    // Fallback for any count beyond the table
+    const full = Math.floor(n / perRow);
+    const rem  = n % perRow;
+    if (rem === 0) return Array(full).fill(perRow);
+    const tail = perRow + rem;
+    const a = Math.ceil(tail / 2);
+    return [...Array(full - 1).fill(perRow), a, tail - a];
   }
 
   private startSlideshow(): void {

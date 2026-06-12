@@ -122,23 +122,52 @@
 }
 
 /* ===== Menu Grid ===== */
+/*
+ * 6-column CSS grid. Each row (.menu-row) spans all 6 columns and is itself
+ * a 6-column subgrid. Cards inside span 2, 3, or 6 columns depending on how
+ * many cards share that row (data-cols="3" → 2 cols each, "2" → 3 cols each,
+ * "1" → 6 cols). This gives balanced widths for any row size without flex math.
+ *
+ * Row heights come from --card-height (px), computed in TypeScript as:
+ *   min(availableHeightPerRow, cardWidth)  ← square cap, never portrait
+ * All rows together fill the available space with no scrolling.
+ */
 .menu-grid {
-  flex: 1;
-  overflow-y: auto;
+  --grid-gap: 14px;
+  --card-height: 300px; /* overridden inline per category */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
   padding: 16px 14px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  align-content: start;
-  scrollbar-width: none;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: var(--card-height);
+  gap: var(--grid-gap);
+  align-content: center; /* center the row block if square cap leaves vertical space */
 }
 
-.menu-grid::-webkit-scrollbar {
-  display: none;
+/* Each row spans all 6 columns and lays its cards out as a 6-col subgrid */
+.menu-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--grid-gap);
+}
+
+/* 3 cards in the row → each spans 2 of 6 columns */
+.menu-row[data-cols="3"] .menu-card { grid-column: span 2; }
+/* 2 cards in the row → each spans 3 of 6 columns */
+.menu-row[data-cols="2"] .menu-card { grid-column: span 3; }
+/* 1 card in the row → full width */
+.menu-row[data-cols="1"] .menu-card {
+  grid-column: 1 / -1;
 }
 
 /* ===== Menu Card ===== */
 .menu-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   border-radius: 12px !important;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.08) !important;
@@ -147,10 +176,10 @@
   border: 1px solid rgba(0,0,0,0.06) !important;
 }
 
+/* Image grows to fill all height not claimed by the text body */
 .card-image-wrapper {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
+  flex: 1 1 auto;
   overflow: hidden;
   background: #e8e0d4;
 }
@@ -185,6 +214,7 @@
 }
 
 .card-body {
+  flex: 0 0 auto;
   padding: 10px 10px 12px !important;
 }
 
@@ -215,6 +245,40 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ===== Typography scaling for 2-card rows (large cards) ===== */
+.menu-row[data-cols="2"] .card-body,
+.menu-row[data-cols="1"] .card-body {
+  padding: 14px 16px 16px !important;
+}
+.menu-row[data-cols="2"] .item-name,
+.menu-row[data-cols="1"] .item-name {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+.menu-row[data-cols="2"] .item-price,
+.menu-row[data-cols="1"] .item-price {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.menu-row[data-cols="2"] .item-desc,
+.menu-row[data-cols="1"] .item-desc {
+  font-size: 13px;
+  -webkit-line-clamp: 2;
+}
+.menu-row[data-cols="2"] .card-favorite,
+.menu-row[data-cols="1"] .card-favorite {
+  top: 10px;
+  left: 10px;
+  width: 34px;
+  height: 34px;
+}
+.menu-row[data-cols="2"] .card-favorite mat-icon,
+.menu-row[data-cols="1"] .card-favorite mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 /* ===== Bottom Bar ===== */

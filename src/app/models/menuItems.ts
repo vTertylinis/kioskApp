@@ -26,9 +26,10 @@ export const menuItems: MenuItem[] = [
 
   { id: 112, name: 'CLUB_SANDWICH', price: 10.5, category: 'CLUB_SANDWICH', description: 'CLUB_SANDWICH_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/club.webp' },
   { id: 113, name: 'CLUB_SANDWICH_CAESAR_CHICKEN', price: 12.5, category: 'CLUB_SANDWICH', description: 'CLUB_SANDWICH_CAESAR_CHICKEN_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/clubCeasars.webp' },
-  { id: 114, name: 'CLUB_SANDWICH_GYRO', price: 12.5, category: 'CLUB_SANDWICH', description: 'CLUB_SANDWICH_GYRO_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/gyrosclub.webp' },
   { id: 115, name: 'CLUB_SANDWICH_PANSETSA', price: 13, category: 'CLUB_SANDWICH', image: 'https://21images.s3.eu-north-1.amazonaws.com/clubpanseta.webp',  description: 'CLUB_SANDWICH_PANSETSA_DESC' },
   { id: 118, name: 'CLUB_CALAMARI', price: 12, category: 'CLUB_SANDWICH', description: 'CLUB_CALAMARI_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/kalamariclub.webp' },
+  { id: 114, name: 'CLUB_SANDWICH_GYRO', price: 12.5, category: 'CLUB_SANDWICH', description: 'CLUB_SANDWICH_GYRO_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/gyrosclub.webp' },
+
 
   { id: 116, name: 'JUNIOR_1', price: 7.5, category: 'JUNIOR_MENU', description: 'JUNIOR_1_DESC' , image: 'https://21images.s3.eu-north-1.amazonaws.com/juniorburger.webp'},
   { id: 117, name: 'JUNIOR_2', price: 7.5, category: 'JUNIOR_MENU', description: 'JUNIOR_2_DESC' , image: 'https://21images.s3.eu-north-1.amazonaws.com/juniornuggets.webp'},
@@ -38,12 +39,12 @@ export const menuItems: MenuItem[] = [
   { id: 233, name: 'PINSA_PEPPERONI', price: 12.5, category: 'PINSA', description: 'PINSA_PEPPERONI_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/peperoni.webp' },
   { id: 123, name: 'PINSA_MARGARITA', price: 12, category: 'PINSA', description: 'PINSA_MARGARITA_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/margarita.webp' },
 
-  { id: 127, name: 'BOLOGNESE', price: 11, category: 'PASTA', description: 'BOLOGNESE_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/bolognese.webp' },
-  { id: 128, name: 'CARBONARA', price: 11, category: 'PASTA', description: 'CARBONARA_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/carbonara.webp' },
-  { id: 131, name: 'PASTA_21', price: 11, category: 'PASTA', description: 'PASTA_21_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/pasta21new.webp' },
-  { id: 129, name: 'penesMeKotopoulo', price: 12, category: 'PASTA', description: 'penesMeKotopouloDesc', image: 'https://21images.s3.eu-north-1.amazonaws.com/peneskoto.webp' },
   { id: 130, name: 'rigatoniCheeses', price: 11, category: 'PASTA', description: 'rigatoniCheesesDesc', image: 'https://21images.s3.eu-north-1.amazonaws.com/penes4tiria.webp' },
   { id: 132, name: 'SHRIMP_PASTA', price: 19, category: 'PASTA', image: 'https://21images.s3.eu-north-1.amazonaws.com/garidomakaronada.webp',  description: 'SHRIMP_PASTA_DESC' },
+  { id: 131, name: 'PASTA_21', price: 11, category: 'PASTA', description: 'PASTA_21_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/pasta21new.webp' },
+  { id: 129, name: 'penesMeKotopoulo', price: 12, category: 'PASTA', description: 'penesMeKotopouloDesc', image: 'https://21images.s3.eu-north-1.amazonaws.com/peneskoto.webp' },
+  { id: 127, name: 'BOLOGNESE', price: 11, category: 'PASTA', description: 'BOLOGNESE_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/bolognese.webp' },
+  { id: 128, name: 'CARBONARA', price: 11, category: 'PASTA', description: 'CARBONARA_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/carbonara.webp' },
   { id: 230, name: 'SEAFOOD_PASTA', price: 19, category: 'PASTA', description: 'SEAFOOD_PASTA_DESC' , image: 'https://21images.s3.eu-north-1.amazonaws.com/thalasinon.webp'},
 
   { id: 136, name: 'HOT_DOG', price: 7, category: 'HOTDOG_BURGERS', description: 'HOT_DOG_DESC' , image: 'https://21images.s3.eu-north-1.amazonaws.com/hot-dog.webp'},
@@ -69,11 +70,12 @@ export const menuItems: MenuItem[] = [
 
   { id: 154, name: 'PORK_PANSETTO', price: 18, category: 'MAIN_COURSES', description: 'PORK_PANSETTO_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/pansetomprizolaa.webp' },
   { id: 156, name: 'CHICKEN_NUGGETS', price: 12, category: 'MAIN_COURSES', image: 'https://21images.s3.eu-north-1.amazonaws.com/nuggets.webp',  description: 'CHICKEN_NUGGETS_DESC' },
-  { id: 157, name: 'CHICKEN_NUGGETS_A_LA_CREME', price: 13, category: 'MAIN_COURSES', image: 'https://21images.s3.eu-north-1.amazonaws.com/alacreme.webp',  description: 'CHICKEN_NUGGETS_A_LA_CREME_DESC' },
   { id: 158, name: 'FRIED_CALAMARI', price: 12, category: 'MAIN_COURSES', image: 'https://21images.s3.eu-north-1.amazonaws.com/kalamari.webp',  description: 'FRIED_CALAMARI_DESC' },
   { id: 159, name: 'SALMON_TERIYAKI', price: 18, category: 'MAIN_COURSES', image: 'https://21images.s3.eu-north-1.amazonaws.com/solomos.webp',  description: 'SALMON_TERIYAKI_DESC' },
   { id: 160, name: 'CHICKEN_THIGH', price: 13, category: 'MAIN_COURSES', description: 'CHICKEN_THIGH_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/fileto+mpouti.webp' },
   { id: 161, name: 'BEEF_PATTY', price: 12.5, category: 'MAIN_COURSES', description: 'BEEF_PATTY_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/mpiftekiaa.webp' },
   { id: 162, name: 'PORK_GYRO', price: 12, category: 'MAIN_COURSES', description: 'PORK_GYRO_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/gyros.webp' },
   { id: 163, name: 'MIX_GRILL', price: 18, category: 'MAIN_COURSES', description: 'MIX_GRILL_DESC', image: 'https://21images.s3.eu-north-1.amazonaws.com/grill.webp' },
+  { id: 157, name: 'CHICKEN_NUGGETS_A_LA_CREME', price: 13, category: 'MAIN_COURSES', image: 'https://21images.s3.eu-north-1.amazonaws.com/alacreme.webp',  description: 'CHICKEN_NUGGETS_A_LA_CREME_DESC' },
+
 ]
