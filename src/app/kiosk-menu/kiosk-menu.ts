@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, signal, computed, ElementRef, ViewChild } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { menuItems, MenuItem } from '../models/menuItems';
 
 interface Category {
@@ -177,7 +175,7 @@ export interface GridLayout {
 @Component({
   selector: 'app-kiosk-menu',
   standalone: true,
-  imports: [CurrencyPipe, MatCardModule, MatIconModule, MatProgressBarModule],
+  imports: [CurrencyPipe, MatIconModule],
   templateUrl: './kiosk-menu.html',
   styleUrl: './kiosk-menu.css',
 })

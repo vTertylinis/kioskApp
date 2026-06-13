@@ -1,28 +1,30 @@
 <div class="kiosk-container">
-  <!-- Hero Header -->
+  <!-- ===== Header ===== -->
   <header class="hero-header">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <div class="brand-logo">
+    <div class="brand-row">
+      <div class="brand-mark">
         <img src="https://21images.s3.eu-north-1.amazonaws.com/21_192x192.webp" alt="21 Kitchen Logo" class="brand-logo-img" />
+        <div class="brand-text">
+          <span class="brand-name">21 Kitchen</span>
+          <span class="brand-tagline">Cocktail Bar</span>
+        </div>
       </div>
-      <h1 class="brand-name">21 Kitchen</h1>
-      <span class="brand-tagline">— Cocktail Bar —</span>
+      <div class="brand-badge">
+        <span>FRESH</span><i></i><span>PREMIUM</span><i></i><span>HANDMADE</span>
+      </div>
+    </div>
 
-      <div class="category-title-wrapper">
-        <span class="chevron-left">›</span>
-        <h2 class="category-title">{{ currentCategory().label }}</h2>
-        <span class="chevron-right">‹</span>
-      </div>
-      <div class="hero-badge">
-        <span>FRESH • PREMIUM • HANDMADE</span>
-      </div>
+    <div class="category-headline">
+      <span class="cat-accent">{{ currentIndex() + 1 < 10 ? '0' : '' }}{{ currentIndex() + 1 }}</span>
+      <h2 class="category-title">{{ currentCategory().label }}</h2>
+      <span class="cat-rule"></span>
     </div>
   </header>
 
-  <!-- Menu Grid -->
+  <!-- ===== Menu Grid ===== -->
   <!-- 6-column CSS grid: 1 card/row → span 6, 2 cards/row → span 3, 3 cards/row → span 2 -->
   <section #menuGrid class="menu-grid"
+    [attr.data-cat]="gridLayout().categoryKey"
     [style.--card-height.px]="gridLayout().cardHeight"
     [style.--grid-gap.px]="gridLayout().gap">
     @for (row of gridLayout().rows; track $index) {
@@ -30,55 +32,43 @@
         [attr.data-cols]="row.length"
         [attr.data-tail]="row.length < gridLayout().perRow ? true : null">
         @for (item of row; track item.id) {
-          <mat-card class="menu-card" appearance="outlined">
-            <div class="card-image-wrapper">
-              <img [src]="item.image" [alt]="getItemName(item)" class="card-image" loading="eager" />
-            </div>
-            <mat-card-content class="card-body">
+          <article class="menu-card">
+            <img [src]="item.image" [alt]="getItemName(item)" class="card-image" loading="eager" />
+            <div class="card-scrim"></div>
+            <div class="card-body">
               <h3 class="item-name">{{ getItemName(item) }}</h3>
-              <span class="item-price">{{ item.price | currency:'EUR':'symbol':'1.2-2' }}</span>
               @if (getItemDesc(item) && gridLayout().categoryKey !== 'BREAKFAST') {
                 <p class="item-desc">{{ getItemDesc(item) }}</p>
               }
-            </mat-card-content>
-          </mat-card>
+            </div>
+            <span class="item-price">{{ item.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+          </article>
         }
       </div>
     }
   </section>
 
-  <!-- Bottom Bar -->
+  <!-- ===== Bottom Rail ===== -->
   <footer class="bottom-bar">
-    <div class="category-strip-label">
-      <span class="strip-dash">—</span>
-      <span>BROWSE CATEGORIES</span>
-      <span class="strip-dash">—</span>
-    </div>
     <div class="category-strip">
-      <div class="nav-arrow">
-        <mat-icon>chevron_left</mat-icon>
-      </div>
       @for (cat of categories; track cat.key; let i = $index) {
         <div class="cat-chip" [class.active]="currentIndex() === i">
           <mat-icon class="cat-chip-icon">{{ cat.icon }}</mat-icon>
           <span class="cat-chip-label">{{ cat.label }}</span>
         </div>
       }
-      <div class="nav-arrow">
-        <mat-icon>chevron_right</mat-icon>
-      </div>
     </div>
+
     <div class="progress-row">
       <div class="progress-info-left">
-        <mat-icon class="progress-icon">restaurant_menu</mat-icon>
-        <div class="progress-text">
-          <span class="progress-label">SHOWING CATEGORY</span>
-          <span class="progress-count">{{ currentIndex() + 1 }} OF {{ categories.length }}</span>
-        </div>
+        <span class="progress-label">NOW SHOWING</span>
+        <span class="progress-count">{{ currentIndex() + 1 }} / {{ categories.length }}</span>
       </div>
-      <mat-progress-bar mode="determinate" [value]="progress()" class="progress-bar"></mat-progress-bar>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progress()"></div>
+      </div>
       <div class="progress-info-right">
-        <span class="countdown-label">NEXT CATEGORY IN</span>
+        <span class="countdown-label">NEXT IN</span>
         <span class="countdown-timer">{{ getCountdown() }}</span>
       </div>
     </div>
