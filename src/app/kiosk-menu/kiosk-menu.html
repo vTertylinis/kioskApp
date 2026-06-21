@@ -52,10 +52,14 @@
   <footer class="bottom-bar">
     <div class="category-strip">
       @for (cat of categories; track cat.key; let i = $index) {
-        <div class="cat-chip" [class.active]="currentIndex() === i">
+        <button
+          type="button"
+          class="cat-chip"
+          [class.active]="currentIndex() === i"
+          (click)="selectCategory(i)">
           <mat-icon class="cat-chip-icon">{{ cat.icon }}</mat-icon>
           <span class="cat-chip-label">{{ cat.label }}</span>
-        </div>
+        </button>
       }
     </div>
 

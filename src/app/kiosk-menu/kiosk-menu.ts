@@ -153,7 +153,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   MAIN_COURSES: 'restaurant',
 };
 
-const SLIDE_DURATION_MS = 8000;
+const SLIDE_DURATION_MS = 9000;
 const GRID_GAP = 14;
 
 export interface GridLayout {
@@ -358,6 +358,18 @@ export class KioskMenu implements OnInit, AfterViewInit, OnDestroy {
     this.currentIndex.set(next);
     this.progress.set(0);
     this.startTime = Date.now();
+  }
+
+  /**
+   * Jump to a category when the user taps its chip. Restarts the slideshow
+   * timer so the chosen category gets the full duration before auto-advancing.
+   */
+  selectCategory(index: number): void {
+    if (index === this.currentIndex()) return;
+    this.currentIndex.set(index);
+    this.progress.set(0);
+    this.stopSlideshow();
+    this.startSlideshow();
   }
 
   getItemName(item: MenuItem): string {

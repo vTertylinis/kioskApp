@@ -54,7 +54,6 @@
 .brand-logo-img {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
   border: 1.5px solid var(--hairline);
   padding: 3px;
   background: var(--bg-elevated);
@@ -320,6 +319,19 @@
   background: var(--panel);
   transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   min-width: 66px;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.cat-chip:active {
+  transform: scale(0.95);
+}
+
+.cat-chip.active:active {
+  transform: translateY(-2px) scale(0.97);
 }
 
 .cat-chip.active {
